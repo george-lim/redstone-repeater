@@ -48,7 +48,7 @@
 
             let hasClickedVideoOnce = false;
 
-            video.addEventListener('click', (e) => {
+            const unmuteVideo = (e) => {
                 if (hasClickedVideoOnce) {
                     return;
                 }
@@ -56,7 +56,10 @@
                 hasClickedVideoOnce = true;
                 e.preventDefault();
                 video.muted = false;
-            });
+            }
+
+            video.addEventListener('click', unmuteVideo);
+            video.addEventListener('touchstart', unmuteVideo);
         })();
     </script>
 </body>
