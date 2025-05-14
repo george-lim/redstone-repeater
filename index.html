@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redstone Repeater</title>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            background: black;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+    <video id="video" autoplay controls muted></video>
+    <script>
+        (function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const channel = urlParams.get('channel');
+
+            if (!channel) {
+                return;
+            }
+
+            const video = document.getElementById('video');
+            const videoSrc = '#{VIDEO_SRC_TEMPLATE}#'.replace('${channel}', channel);
+
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(videoSrc);
+                hls.attachMedia(video);
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = videoSrc;
+            }
+
+            let hasClickedVideoOnce = false;
+
+            video.addEventListener('click', (e) => {
+                if (hasClickedVideoOnce) {
+                    return;
+                }
+
+                hasClickedVideoOnce = true;
+                e.preventDefault();
+                video.muted = false;
+            });
+        })();
+    </script>
+</body>
+
+</html>
